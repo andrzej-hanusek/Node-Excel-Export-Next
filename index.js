@@ -1,7 +1,7 @@
 require('node-zip');
 var fs = require('fs'),
 Sheet = require('./sheet'),
-SortedMap = require('collections/sorted-map');
+SortedMap = require('./SortedMap');
 
 Date.prototype.getJulian = function() {
 	return Math.floor((this / 86400000) - (this.getTimezoneOffset() / 1440) + 2440587.5);
