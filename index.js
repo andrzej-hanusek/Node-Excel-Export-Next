@@ -1,6 +1,6 @@
 require('node-zip');
 var fs = require('fs'),
-Sheet = require('./sheet'),
+Sheet = require('./sheet');
 var SortableMap = require("./SortableMap");
 
 
