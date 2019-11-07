@@ -146,10 +146,8 @@ var addStringCell = function(sheet, cellRef, value, styleIndex){
     value = value.replace(/&/g, "&amp;").replace(/'/g, "&apos;").replace(/>/g, "&gt;").replace(/</g, "&lt;");
   }
   var i = sheet.shareStrings.get(value) || -1;
-  console.log('selectd index', i);
 	if ( i< 0){
     i = sheet.shareStrings.size;
-    console.log('size', i)
   	sheet.shareStrings.set(i, value);
     sheet.shareStrings.sort((a, b) => a[0] - b[0]);
     sheet.convertedShareStrings += "<x:si><x:t>"+value+"</x:t></x:si>";
