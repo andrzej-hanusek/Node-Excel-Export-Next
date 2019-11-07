@@ -1,12 +1,12 @@
 {
   "name": "excel-export-next",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Simple data set export to Excel xlsx file",
   "main": "index.js",
   "scripts": {
     "test": "mocha test/main"
   },
-  "repository": "https://github.com/somewind/Node-Excel-Export-Next",
+  "repository": "https://github.com/andrzej-hanusek/Node-Excel-Export-Next",
   "keywords": [
     "Excel",
     "xlsx"
@@ -14,7 +14,6 @@
   "author": "Ber-Lin Lai <berlin.lai@gmail.com>",
   "license": "BSD",
   "dependencies": {
-    "@esfx/collections-sortedmap": "1.0.0-pre.13",
     "node-zip": "1.x"
   },
   "devDependencies": {

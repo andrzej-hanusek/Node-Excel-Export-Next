@@ -1,7 +1,8 @@
 require('node-zip');
 var fs = require('fs'),
 Sheet = require('./sheet'),
-helpers = require('@esfx/collections-sortedmap');
+var SortableMap = require("./SortableMap");
+
 
 Date.prototype.getJulian = function() {
 	return Math.floor((this / 86400000) - (this.getTimezoneOffset() / 1440) + 2440587.5);
@@ -62,14 +63,14 @@ function generateRel(configs,xlsx) {
 	workbook += relBack;
 	xlsx.file('xl/_rels/workbook.xml.rels', workbook);
 	xlsx.file('_rels/.rels', '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-			  + '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' 
-			  + '<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties" Target="docProps/app.xml"/>' 
+			  + '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+			  + '<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties" Target="docProps/app.xml"/>'
 			  + '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>');
 }
 
 function generateWorkbook(configs,xlsx) {
 	var workbook = sheetsFront;
-	var i = 1;	
+	var i = 1;
 	configs.forEach( function(config) {
 		workbook += '<sheet name="'+ config.name + '" sheetId="' + i +'" r:id="rId' + i + '"/>';
 		i++;
@@ -79,8 +80,8 @@ function generateWorkbook(configs,xlsx) {
 }
 
 function generateSharedStringsFile(xlsx){
-	if (shareStrings.length > 0) {
-		var sharedStringsFrontTmp = sharedStringsFront.replace(/\$count/g, shareStrings.length);
+	if (shareStrings.size > 0) {
+		var sharedStringsFrontTmp = sharedStringsFront.replace(/\$count/g, shareStrings.size);
 		xlsx.file("xl/sharedStrings.xml", (sharedStringsFrontTmp + convertedShareStrings + sharedStringsBack));
 	}
 	convertedShareStrings = "";
@@ -98,9 +99,9 @@ exports.execute = function(config) {
 		base64: true,
 		checkCRC32: false
 	});
-	shareStrings = new helpers.SortedMap();
-	convertedShareStrings = "";  
-  
+	shareStrings = new SortableMap();
+	convertedShareStrings = "";
+
 	var configs = [];
 	if (config instanceof Array) {
 		configs = config;
@@ -110,7 +111,7 @@ exports.execute = function(config) {
 	generateMultiSheets(configs, xlsx);
 	generateWorkbook(configs, xlsx);
 	generateRel(configs,xlsx) ;
-	generateContentType(configs, xlsx); 
+	generateContentType(configs, xlsx);
 	generateSharedStringsFile(xlsx);
 	var results = xlsx.generate({
 		base64: false,

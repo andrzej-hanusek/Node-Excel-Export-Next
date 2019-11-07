@@ -1,16 +1,16 @@
-var sheetFront = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><x:worksheet xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:x="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' 
-		+ ' <x:sheetPr/><x:sheetViews><x:sheetView tabSelected="1" workbookViewId="0" /></x:sheetViews>' 
+var sheetFront = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><x:worksheet xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:x="http://schemas.openxmlformats.org/spreadsheetml/2006/main">'
+		+ ' <x:sheetPr/><x:sheetViews><x:sheetView tabSelected="1" workbookViewId="0" /></x:sheetViews>'
 		+ ' <x:sheetFormatPr defaultRowHeight="15" />';
 var sheetBack =' <x:pageMargins left="0.75" right="0.75" top="0.75" bottom="0.5" header="0.5" footer="0.75" />'
 		+ ' <x:headerFooter /></x:worksheet>';
-    
+
 var fs = require('fs');
 
 function Sheet(config, xlsx, shareStrings, convertedShareStrings){
   this.config = config;
   this.xlsx = xlsx;
   this.shareStrings = shareStrings;
-  this.convertedShareStrings = convertedShareStrings; 
+  this.convertedShareStrings = convertedShareStrings;
 }
 
 Sheet.prototype.generate = function(){
@@ -145,10 +145,13 @@ var addStringCell = function(sheet, cellRef, value, styleIndex){
   if (typeof value ==='string'){
     value = value.replace(/&/g, "&amp;").replace(/'/g, "&apos;").replace(/>/g, "&gt;").replace(/</g, "&lt;");
   }
-  var i = sheet.shareStrings.get(value, -1);
+  var i = sheet.shareStrings.get(value) || -1;
+  console.log('selectd index', i);
 	if ( i< 0){
-    i = sheet.shareStrings.length;
-  	sheet.shareStrings.add(value, i);
+    i = sheet.shareStrings.size;
+    console.log('size', i)
+  	sheet.shareStrings.set(i, value);
+    sheet.shareStrings.sort((a, b) => a[0] - b[0]);
     sheet.convertedShareStrings += "<x:si><x:t>"+value+"</x:t></x:si>";
 	}
 	return '<x:c r="'+cellRef+'" s="'+ styleIndex + '" t="s"><x:v>'+i+'</x:v></x:c>';
